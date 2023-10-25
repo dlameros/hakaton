@@ -1,7 +1,6 @@
 import math
 from Satellites import *
 
-
 def add_satellite():
     satellite_types = {
         '1': 'Гражданский',
@@ -33,14 +32,6 @@ def add_satellite():
 
 
 def get_distance():
-    while True:
-        target_lat = int(input('Введите координаты ширины в градусах: '))
-        target_lon = int(input('Введите координаты долготы в градусах: '))
-
-        if target_lat < 0 or target_lon < 0:
-            print("Неверные координаты. Попробуйте снова")
-        else:
-            break
 
     def distance(lat1, lon1, lat2, lon2):
         # Преобразовать градусы в радианы
@@ -79,10 +70,24 @@ def get_distance():
 
         return nearest_satellite
 
-    # Находим ближайший спутник к заданной точке на земле
-    nearest_satellite = find_nearest_satellite(target_lat, target_lon, satellites)
 
-    print("Ближайший спутник:", nearest_satellite, "\n")
+    while True:
+        while True:
+            target_lat = int(input('Введите координаты широты в градусах: \n'))
+            if target_lat < -90 or target_lat > 90:
+                print("Неверные координаты широты. Попробуйте снова")
+            else:
+                while True:
+                    target_lon = int(input('Введите координаты долготы в градусах: \n'))
+                    if target_lon < -180 or target_lon > 180:
+                        print("Неверные координаты долготы. Попробуйте снова")
+                    else:
+                        break
+                break
+            
+        nearest_satellite = find_nearest_satellite(target_lat, target_lon, satellites)
+        print("Ближайший спутник:", nearest_satellite, "\n")
+        break
 
 
 # Словарь спутников с их координатами (ш. и д.)
