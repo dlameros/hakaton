@@ -58,34 +58,30 @@ def radial_dif(lat1, lon1, lat2, lon2):
     return radial_difference
 
 def exit_distance(target_lat, target_lon):
-    exit_dist = []
     satellite_distances = []
     while True:
         for name, satellite in satellites:
 
             sat_lat, sat_lon = sat_lat_lon(satellite)
             distance = calculate_distance(sat_lat, sat_lon, target_lat, target_lon)
-            satellite_distances.append((satellite, distance, name))
-
+            satellite_distances.append((distance, satellite, name))
+        satell = min(satellite_distances)
+        return satell
         sorted_satellites = sorted(satellite_distances, key=lambda x: x[1])
         min_radial_difference = float('inf') 
         selected_satellite = None
 
         for i in range(len(sorted_satellites)-1):
-            satellite, distance, name = sorted_satellites[i]
-            satellite2, distance2, name2 = sorted_satellites[i+1]
+            satellite, _, _ = sorted_satellites[i]
+            satellite2, _, _ = sorted_satellites[i+1]
             sat_lat, sat_lon = sat_lat_lon(satellite)
             sat_lat2, sat_lon2 = sat_lat_lon(satellite2)
             radial_difference = radial_dif(sat_lat, sat_lon, sat_lat2, sat_lon2)
             if radial_difference < min_radial_difference:
                 min_radial_difference = radial_difference
-                selected_satellite = sorted_satellites[i][0]
-
-        if not selected_satellite:
-            """selected_satellite = sorted_satellites[0][0]
-        if min_radial_difference > threshold:
-            return selected_satellite
-        return selected_satellite"""
+                selected_satellite = sorted_satellites[i]
+        print()
+        return selected_satellite
     
 def sat_lat_lon(satellite):
     date = datetime.datetime.now()
@@ -94,6 +90,4 @@ def sat_lat_lon(satellite):
     sat_lat = Point(latitude=y/EARTH_RADIUS, longitude=x/EARTH_RADIUS, altitude=z/EARTH_RADIUS).latitude
     sat_lon = Point(latitude=y/EARTH_RADIUS, longitude=x/EARTH_RADIUS, altitude=z/EARTH_RADIUS).longitude
     return (sat_lat, sat_lon)
-
-exit_dist = exit_distance(11, 11)
-print(f"Ближайший спутник{exit_dist[1]}:, {exit_dist[0]}км")
+print(exit_distance(1,6))

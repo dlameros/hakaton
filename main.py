@@ -69,24 +69,9 @@ def add_satellite():
     print(f"\nСпутник {list(satellites.keys())[-1]} успешно добавлен")
 
 
-def get_distance():
-    while True:
-        while True:
-            target_lat = int(input('Введите координаты широты в градусах: \n'))
-            if target_lat < -90 or target_lat > 90:
-                print("Неверные координаты широты. Попробуйте снова")
-            else:
-                while True:
-                    target_lon = int(input('Введите координаты долготы в градусах: \n'))
-                    if target_lon < -180 or target_lon > 180:
-                        print("Неверные координаты долготы. Попробуйте снова")
-                    else:
-                        break
-                break
-        satelites = satelite()
-        exit_dist = exit_distance(satelites, target_lat, target_lon)
-        print(f"Ближайший спутник{exit_dist[1]}:, {exit_dist[0]}км")
-        break
+def get_distance(target_lat, target_lon):
+        selected_satellite = exit_distance(target_lat, target_lon)
+        return selected_satellite
 
 
 # Словарь спутников с их координатами (ш. и д.)
@@ -96,25 +81,38 @@ satellites = {
     'Спутник 3': Satellites(37.7749, -55.4194, 'Россия', 'Метеорологический'),
     'Спутник 4': Satellites(51.5074, 0.1278, 'Россия', 'Научный')
 }
+def task():
+    while True:
+        print("---------------------------\n"
+            "Выберите действие:\n"
+            "[1] Отобразить спутники и информацию о них\n"
+            "[2] Соединиться со спутником\n"
+            "[3] Добавить спутник"
+            )
 
-while True:
-    print("---------------------------\n"
-          "Выберите действие:\n"
-          "[1] Отобразить спутники и информацию о них\n"
-          "[2] Соединиться со спутником\n"
-          "[3] Добавить спутник"
-          )
+        menu = input("Выбор: ")
 
-    menu = input("Выбор: ")
-
-    if menu not in ['1', '2', '3']:
-        print("Неправильный выбор. Попробуйте снова.")
-    else:
-        if menu == '1':
-            for key, value in satellites.items():
-                print(key, value.print_info())
-            print()
-        elif menu == '2':
-            get_distance()
-        elif menu == '3':
-            add_satellite()
+        if menu not in ['1', '2', '3']:
+            print("Неправильный выбор. Попробуйте снова.")
+        else:
+            if menu == '1':
+                for key, value in satellites.items():
+                    print(key, value.print_info())
+                print()
+            elif menu == '2':
+                while True:
+                    target_lat = int(input('Введите координаты широты в градусах: \n'))
+                    if target_lat < -90 or target_lat > 90:
+                        print("Неверные координаты широты. Попробуйте снова")
+                    else:
+                        while True:
+                            target_lon = int(input('Введите координаты долготы в градусах: \n'))
+                            if target_lon < -180 or target_lon > 180:
+                                print("Неверные координаты долготы. Попробуйте снова")
+                            else:
+                                break
+                        break
+                a = get_distance(target_lat, target_lon)
+                return (str(a[0]), str(a[2]))
+            elif menu == '3':
+                add_satellite()
