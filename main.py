@@ -1,6 +1,6 @@
 import math
 from Satellites import *
-
+from sat import *
 
 def check_values(min_coord, max_coord, type):
     try:
@@ -44,45 +44,6 @@ def add_satellite():
 
 def get_distance():
 
-    def distance(lat1, lon1, lat2, lon2):
-        # Преобразовать градусы в радианы
-        lat1 = math.radians(lat1)
-        lon1 = math.radians(lon1)
-        lat2 = math.radians(lat2)
-        lon2 = math.radians(lon2)
-
-        # Рассчитать разницу между широтой и долготой
-        dlat = lat2 - lat1
-        dlon = lon2 - lon1
-
-        # Расчет гаверсинуса
-        a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
-
-        # Расчет центрального угла
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-
-        # Расчет расстояния на поверхности земли
-        r = 6371  # Радиус Земли в километрах
-        dist = r * c
-
-        print("Высота спутника", dist, "км")
-        return dist
-
-    def find_nearest_satellite(target_lat, target_lon, satellites):
-        min_dist = float('inf')  # Начальное значение минимального расстояния
-        nearest_satellite = ''
-
-        for satellite, coords in satellites.items():
-            satellite_lat, satellite_lon = coords.return_val()
-            dist = distance(target_lat, target_lon, satellite_lat, satellite_lon)
-
-            if dist < min_dist:
-                min_dist = dist
-                nearest_satellite = satellite
-
-        return nearest_satellite
-
-
     while True:
         while True:
             target_lat = int(input('Введите координаты широты в градусах: \n'))
@@ -96,9 +57,9 @@ def get_distance():
                     else:
                         break
                 break
-            
-        nearest_satellite = find_nearest_satellite(target_lat, target_lon, satellites)
-        print("Ближайший спутник:", nearest_satellite, "\n")
+        satelites = satelite()
+        exit_dist = exit_distance(satelites, target_lat, target_lon)
+        print(f"Ближайший спутник{exit_dist[1]}:, {exit_dist[0]}км")
 
         break
 
