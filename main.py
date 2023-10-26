@@ -1,6 +1,8 @@
 import math
+import os
 from Satellites import *
 from sat import *
+
 
 def check_values(min_coord, max_coord, type):
     try:
@@ -23,27 +25,51 @@ def add_satellite():
         '7': 'Научный'
     }
 
+    satellite_countries = {
+        '1': 'Россия',
+        '2': 'США',
+        '3': 'Италия',
+        '4': 'Франция',
+        '5': 'Индия',
+        '6': 'Республика Беларусь',
+        '7': 'Китай'
+    }
+
     def set_type():
-        print("Выберите тип спутника: ")
+        print("Выберите тип спутника:")
         for key, value in satellite_types.items():
             print("{0}: {1}".format(key, value))
         choose = input("Выбор: ")
-
-        if choose not in ['1', '2', '3', '4', '5', '6', '7']:
+        if choose not in satellite_types.keys():
             print("Неправильный выбор. Попробуйте снова.")
+            return set_type()
         else:
             return satellite_types[choose]
 
-    satellites[f"Спутник {len(satellites) + 1}"] = Satellites(
+    def set_country():
+        print("Выберите страну-владельца спутника: ")
+        for key, value in satellite_countries.items():
+            print("{0}: {1}".format(key, value))
+        choose = input("Выбор: ")
+        if choose not in ['1', '2', '3', '4', '5', '6', '7']:
+            print("Неправильный выбор. Попробуйте снова.")
+            return set_country()
+        else:
+            return satellite_countries[choose]
+
+    satellite_name = input('\nИмя спутника: ')
+
+    satellites[satellite_name] = Satellites(
         check_values(-90, 90, "Координата ширины: "),
         check_values(-180, 180, "Координата долготы: "),
-        input("Страна-владелец: "),
+        set_country(),
         set_type()
     )
 
+    print(f"\nСпутник {list(satellites.keys())[-1]} успешно добавлен")
+
 
 def get_distance():
-
     while True:
         while True:
             target_lat = int(input('Введите координаты широты в градусах: \n'))
@@ -60,7 +86,6 @@ def get_distance():
         satelites = satelite()
         exit_dist = exit_distance(satelites, target_lat, target_lon)
         print(f"Ближайший спутник{exit_dist[1]}:, {exit_dist[0]}км")
-
         break
 
 
@@ -73,10 +98,11 @@ satellites = {
 }
 
 while True:
-    print("Выберите действие:\n"
+    print("---------------------------\n"
+          "Выберите действие:\n"
           "[1] Отобразить спутники и информацию о них\n"
           "[2] Соединиться со спутником\n"
-          "[3] Добавить спутник\n"
+          "[3] Добавить спутник"
           )
 
     menu = input("Выбор: ")
