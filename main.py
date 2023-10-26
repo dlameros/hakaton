@@ -2,6 +2,16 @@ import math
 from Satellites import *
 
 
+def check_values(min_coord, max_coord, type):
+    try:
+        num = float(input(type))
+        if(num < max_coord and num > min_coord):
+            return num
+    except:
+        print("Некорректные данные. Попробуйте снова.")
+        check_values(min_coord, max_coord, type)
+
+
 def add_satellite():
     satellite_types = {
         '1': 'Гражданский',
@@ -25,22 +35,14 @@ def add_satellite():
             return satellite_types[choose]
 
     satellites[f"Спутник {len(satellites) + 1}"] = Satellites(
-        float(input("Координата ширины: ")),
-        float(input("Координата долготы: ")),
+        check_values(-90, 90, "Координата ширины: "),
+        check_values(-180, 180, "Координата долготы: "),
         input("Страна-владелец: "),
         set_type()
     )
 
 
 def get_distance():
-    while True:
-        target_lat = int(input('Введите координаты ширины в градусах: '))
-        target_lon = int(input('Введите координаты долготы в градусах: '))
-
-        if target_lat < 0 or target_lon < 0:
-            print("Неверные координаты. Попробуйте снова")
-        else:
-            break
 
     def distance(lat1, lon1, lat2, lon2):
         # Преобразовать градусы в радианы
@@ -63,6 +65,7 @@ def get_distance():
         r = 6371  # Радиус Земли в километрах
         dist = r * c
 
+        print("Высота спутника", dist, "км")
         return dist
 
     def find_nearest_satellite(target_lat, target_lon, satellites):
@@ -79,17 +82,32 @@ def get_distance():
 
         return nearest_satellite
 
-    # Находим ближайший спутник к заданной точке на земле
-    nearest_satellite = find_nearest_satellite(target_lat, target_lon, satellites)
 
-    print("Ближайший спутник:", nearest_satellite, "\n")
+    while True:
+        while True:
+            target_lat = int(input('Введите координаты широты в градусах: \n'))
+            if target_lat < -90 or target_lat > 90:
+                print("Неверные координаты широты. Попробуйте снова")
+            else:
+                while True:
+                    target_lon = int(input('Введите координаты долготы в градусах: \n'))
+                    if target_lon < -180 or target_lon > 180:
+                        print("Неверные координаты долготы. Попробуйте снова")
+                    else:
+                        break
+                break
+            
+        nearest_satellite = find_nearest_satellite(target_lat, target_lon, satellites)
+        print("Ближайший спутник:", nearest_satellite, "\n")
+
+        break
 
 
 # Словарь спутников с их координатами (ш. и д.)
 satellites = {
     'Спутник 1': Satellites(45.467, 9.186, 'Россия', 'Гражданский'),
     'Спутник 2': Satellites(53.3498, 6.2603, 'Россия', 'Экспериментальный'),
-    'Спутник 3': Satellites(37.7749, 122.4194, 'Россия', 'Метеорологический'),
+    'Спутник 3': Satellites(37.7749, -55.4194, 'Россия', 'Метеорологический'),
     'Спутник 4': Satellites(51.5074, 0.1278, 'Россия', 'Научный')
 }
 
@@ -108,7 +126,7 @@ while True:
         if menu == '1':
             for key, value in satellites.items():
                 print(key, value.print_info())
-                print()
+            print()
         elif menu == '2':
             get_distance()
         elif menu == '3':

@@ -6,7 +6,7 @@ class Satellites:
         self.type = type
 
     def print_info(self):
-        return f"Координата ширины: {self.lon}\n", f"Координата долготы: {self.lat}", f"Страна-владелец: {self.country}", f"Тип устройства: {self.type}"
+        return f"Координата ширины: {self.lon}", f"Координата долготы: {self.lat}", f"Страна-владелец: {self.country}", f"Тип устройства: {self.type}"
 
     def return_val(self):
         return self.lon, self.lat
